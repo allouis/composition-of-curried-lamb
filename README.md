@@ -8,7 +8,7 @@ Welcome, I'm Fabien AKA allouis[_]{0,2} on the internet.
 
 This one is simple.
 
-A lambda is just an anonymous function, we use them all the time.
+A lambda is just an anonymous function.
 
 ```javascript
   doSomethingAsync(someParam, function (error, result) {
@@ -54,7 +54,7 @@ engine (blink, webkit, node), use the function name when showing the callstack.
 
 ## Length
 
-Functions in javascript also have a lenth property, which is going to be important when explaining and defining
+Functions in javascript also have a length property, which is going to be important when explaining and defining
 the curry function.
 
 The length propery in javascript refers to the number of named arguments that the function has, you could say
@@ -158,10 +158,10 @@ After this you can then begin to effectively curry functions for reuse and reada
 
 # Writing functions to be curried
 
-You *can* curry any function you wish - provided it takes more than one argument.
+You *can* curry any function you wish.
 
 However for functions that take data and act upon it, it is often more useful to
-have the data as the last argument to the function.
+have the data as the last argument to the function, rather than data first.
 
 The error of data first is especially prominent in array functions and propagated by libraries
 such as underscore and LoDash
@@ -220,7 +220,7 @@ And again, the filter function, but with a data last function signature.
 ```
 
 
-# But I need data first sometimes.
+# But I need data first
 
 On the `odd` (seldom?) occasion that you really do need to continuously filter the shit out of an array,
 we can define a reverse function that will allow you to reverse the order of arguments for any function.
