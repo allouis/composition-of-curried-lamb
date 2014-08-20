@@ -21,23 +21,69 @@ A lambda is just an anonymous function, we use them all the time.
 ```
 
 
+# Functions
+
+## Names
+
+When we say that a lambda is an anonymous function what we really mean, is that it is an unnamed
+function.
+
+Functions in javascript have a property called name that can only be set by using a name after the function
+keyword.
+
+```javascript
+var base = function base () {
+  // .. blah blah
+};
+
+base.name; // => 'base'
+
+var whatever = function () {
+  / ... blah blah blah
+};
+
+whatever.name; // => ''
+```
+
+Named functions can be handy, especially when debugging code, modern javascript interpreters, such as the V8
+engine (blink, webkit, node), use the function name when showing the callstack.
+
+
+# Functions
+
+## Length
+
+Functions in javascript also have a lenth property, which is going to be important when explaining and defining
+the curry function.
+
+The length propery in javascript refers to the number of named arguments that the function has, you could say
+that it is a property of the function signature.
+
+```javascript
+  var boom = function (a, b, c) {
+    // meh
+  };
+  boom.length; // => 3;
+```
+
+
 # What is currying?
 
 Currying is taking a function that takes more than one argument and transforming it into
 a function that takes a single argument. 
 
-This new function will keep returning similar arguments until the original number of aruments
+This new function will keep returning similar functions until the original number of aruments
 have been passed - at this point the original function is invoked with all arguments passed
 to previous functions in the "curry stack"
 
 ```javascript
-  add5Numbers(1, 2, 3, 4, 5); // => 15;
+  add3Numbers(1, 2, 3); // => 6;
 
-  add5NumbersCurried(1)(2)(3)(4)(5); // => 15
+  add3NumbersCurried(1)(2)(3); // => 6
 
-  add4NumbersTo10Curried = add5NumbersCurried(10);
+  add2NumbersTo10Curried = add3NumbersCurried(10);
 
-  add4NumbersTo10Curried(1)(1)(1)(1); // => 14
+  add2NumbersTo10Curried(1)(1); // => 12
 ```
 
 
@@ -63,7 +109,7 @@ Take for example this piece of code
 # Why curry?
 
 If we were to have curried the notify function we could have reduced the repetitive first argument
-like so
+like so:
 
 ```javascript
   var error = notify('error');
@@ -97,6 +143,18 @@ The rules of executing once all arguments are recieved still apply.
 ```
 
 
+# Advocation of autocurry
+
+For the rest of this talk, when I use the `curry` function or talk of a curried function
+I'll be referring to an auto curried function.
+
+When starting out with using curried functions in your code, I would recommend using
+autocurry as you're able to apply this to every single function in your codebase and have it
+still work as expected.
+
+After this you can then begin to effectively curry functions for reuse and readability.
+
+
 # Writing functions to be curried
 
 You *can* curry any function you wish - provided it takes more than one argument.
@@ -104,24 +162,30 @@ You *can* curry any function you wish - provided it takes more than one argument
 However for functions that take data and act upon it, it is often more useful to
 have the data as the last argument to the function.
 
-Lets take the map function for example
+The error of data first is especially prominent in array functions and propagated by libraries
+such as underscore and LoDash
+
+
+# Data first
+
+Here we have the filter function, with a data first function signature.
 
 ```javascript
-  var map = curry(function (array, func) {
-    return array.map(func);
+  var filter = curry(function (array, func) {
+    return array.filter(func);
   }); 
 
   var oneToFive = [1,2,3,4,5];
 
-  map(oneToFive, function (num) {
+  filter(oneToFive, function (num) {
     return num % 2 
   }); // => [1, 3, 5]
 
-  // We can curry the map function with the array
+  // We can curry the filter function with the array
 
-  var map1To5 = map(oneToFive);
+  var filter1To5 = filter(oneToFive);
 
-  map1To5(function (num) {
+  filter1To5(function (num) {
     return num % 2  
   }); // => [1, 3, 5]
 ```
@@ -129,29 +193,49 @@ Lets take the map function for example
 
 # Data last
 
-Continuing from the last example we'll rewrite the map function to take data last
+And again, the filter function, but with a data last function signature.
 
 ```javascript
-  var map = curry(function (func, array) {
-    return array.map(func);  
+  var filter = curry(function (func, array) {
+    return array.filter(func);  
   });
 
   var oneToFive = [1,2,3,4,5];
 
-  map(function (num) {
+  filter(function (num) {
     return num % 2 
   }, oneToFive); // => [1, 3, 5]
 
-  // let's curry the map function with a function
+  // let's curry the filter function with a function
 
-  var mapOdds = map(function (num) {
+  var filterOdds = filter(function (num) {
     return num % 2
   });
 
   // and boom we can now get the odd elements in any array.
 
-  mapOdds(oneToFive) // => [1, 3, 5]
-  mapOdds([1, 23, 24, 68, 56, 99]) // => [1, 23, 99]
+  filterOdds(oneToFive) // => [1, 3, 5]
+  filterOdds([1, 23, 24, 68, 56, 99]) // => [1, 23, 99]
+```
+
+
+# But I need data first sometimes.
+
+On the `odd` (seldom?) occasion that you really do need to continuously filter the shit out of an array,
+we can define a reverse function that will allow you to reverse the order of arguments for any function.
+
+usage would be as such:
+
+```javascript
+var divide = function (a, b) {
+  return a / b;
+};
+
+var reversedDivide = reverse(divide);
+
+divide(4, 2); // => 2
+
+reversedDivide(4, 2); // => 0.5
 ```
 
 
@@ -227,8 +311,23 @@ Granted, we have to define two extra functions for the second version.
 However both these functions will be smaller than the original, and reusable.
 If we have to format the username somewhere else we now have a utility for that.
 
+In fact depending on how we can compose we can now use the greetUser in two enviroments.
+
+```javascript
+var log = console.log.bind(console);
+
+var createMessageForUser = compose(createMessage, formatUsername, getUserById);
+
+var greetUser = compose(displayPopup, createMessageForUser);
+
+var greetUserViaCommandLine = compose(log, createMessageForUser);
+```
+
 
 # Bringing it all together.
+
+Now we've gone over the basics of currying and composition we can take a look at some
+useful functions to work with, and then how we can combine them to build something!
 
 
 
