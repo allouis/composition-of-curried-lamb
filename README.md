@@ -57,7 +57,7 @@ engine (blink, webkit, node), use the function name when showing the callstack.
 Functions in javascript also have a length property, which is going to be important when explaining and defining
 the curry function.
 
-The length propery in javascript refers to the number of named arguments that the function has, you could say
+The length property in javascript refers to the number of named arguments that the function has, you could say
 that it is a property of the function signature.
 
 ```javascript
@@ -73,7 +73,7 @@ that it is a property of the function signature.
 Currying is taking a function that takes more than one argument and transforming it into
 a function that takes a single argument. 
 
-This new function will keep returning similar functions until the original number of aruments
+This new function will keep returning similar functions until the original number of arguments
 have been passed - at this point the original function is invoked with all arguments passed
 to previous functions in the "curry stack"
 
@@ -133,7 +133,7 @@ Autocurrying is an alternative to curry, it still transforms a function just lik
 
 It allows you to pass any number of arguments rather than just one.
 
-The rules of executing once all arguments are recieved still apply.
+The rules of executing once all arguments are received still apply.
 
 ```javascript
   add5NumbersAutocurried(1)(2)(3)(4)(5); // => 15
@@ -314,7 +314,7 @@ Granted, we have to define two extra functions for the second version.
 However both these functions will be smaller than the original, and reusable.
 If we have to format the username somewhere else we now have a utility for that.
 
-In fact depending on how we can compose we can now use the greetUser in two enviroments.
+In fact depending on how we can compose we can now use the greetUser in two environments.
 
 ```javascript
   var log = console.log.bind(console);
@@ -331,7 +331,7 @@ In fact depending on how we can compose we can now use the greetUser in two envi
 
 Let's take a look at the implementations of the curry and compose functions, these aren't super
 important when developing, as you can just use a premade one (there's plenty), however it's always
-good to know whats going on under the hood.
+good to know what's going on under the hood.
 
 
 
