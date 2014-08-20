@@ -327,11 +327,18 @@ In fact depending on how we can compose we can now use the greetUser in two envi
 ```
 
 
+# Implementations
+
+Let's take a look at the implementations of the curry and compose functions, these aren't super
+important when developing, as you can just use a premade one (there's plenty), however it's always
+good to know whats going on under the hood.
+
+
+
 # Bringing it all together.
 
-Now we've gone over the basics of currying and composition we can take a look at some
-useful functions to work with, and then how we can combine them to build something!
-
+Now we've got through all that we can take a look at some more practical uses of these techniques, as well 
+as some very useful functions that can make developing via composition a lot easier.
 
 
 
