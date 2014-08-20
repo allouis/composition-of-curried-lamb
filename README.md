@@ -32,19 +32,20 @@ Functions in javascript have a property called name that can only be set by usin
 keyword.
 
 ```javascript
-var base = function base () {
-  // .. blah blah
-};
+  var base = function base () {
+    // .. blah blah
+  };
 
-base.name; // => 'base'
+  base.name; // => 'base'
 
-var whatever = function () {
-  / ... blah blah blah
-};
+  var whatever = function () {
+    / ... blah blah blah
+  };
 
-whatever.name; // => ''
+  whatever.name; // => ''
 ```
 
+.
 Named functions can be handy, especially when debugging code, modern javascript interpreters, such as the V8
 engine (blink, webkit, node), use the function name when showing the callstack.
 
@@ -227,15 +228,15 @@ we can define a reverse function that will allow you to reverse the order of arg
 usage would be as such:
 
 ```javascript
-var divide = function (a, b) {
-  return a / b;
-};
+  var divide = function (a, b) {
+    return a / b;
+  };
 
-var reversedDivide = reverse(divide);
+  var reversedDivide = reverse(divide);
 
-divide(4, 2); // => 2
+  divide(4, 2); // => 2
 
-reversedDivide(4, 2); // => 0.5
+  reversedDivide(4, 2); // => 0.5
 ```
 
 
@@ -279,6 +280,7 @@ add2Times5 is now reusable
   add2Times5(3); // => 25
 ```
 
+.
 Note that the functions are executed from right to left, this may seem odd at first but it keeps
 them in the same order that they would be in had you done it manually. e.g
 
@@ -296,16 +298,17 @@ Trying to create functions via composition will help you write smaller and purer
 resulting in code that is easier to test and grasp.
 
 ```javascript
-var greetUser = function (id) {
-  var user = getUserById(id);
-  var name = user.name[0].toUpperCase() + user.name.toLowerCase().slice(1);
-  var message = 'Hello, ' + name + '! Welcome to superapp3000';
-  displayPopup(message);
-};
-// vs.
-var greetUser = compose(displayPopup, createMessage, formatUsername, getUserById);
+  var greetUser = function (id) {
+    var user = getUserById(id);
+    var name = user.name[0].toUpperCase() + user.name.toLowerCase().slice(1);
+    var message = 'Hello, ' + name + '! Welcome to superapp3000';
+    displayPopup(message);
+  };
+  // vs.
+  var greetUser = compose(displayPopup, createMessage, formatUsername, getUserById);
 ```
 
+.
 Granted, we have to define two extra functions for the second version.
 
 However both these functions will be smaller than the original, and reusable.
@@ -314,13 +317,13 @@ If we have to format the username somewhere else we now have a utility for that.
 In fact depending on how we can compose we can now use the greetUser in two enviroments.
 
 ```javascript
-var log = console.log.bind(console);
+  var log = console.log.bind(console);
 
-var createMessageForUser = compose(createMessage, formatUsername, getUserById);
+  var createMessageForUser = compose(createMessage, formatUsername, getUserById);
 
-var greetUser = compose(displayPopup, createMessageForUser);
+  var greetUser = compose(displayPopup, createMessageForUser);
 
-var greetUserViaCommandLine = compose(log, createMessageForUser);
+  var greetUserViaCommandLine = compose(log, createMessageForUser);
 ```
 
 
