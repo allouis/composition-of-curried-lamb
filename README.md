@@ -261,8 +261,7 @@ Here we're using the pattern of passing the return value of `add2` as the argume
 
 
 # Let's Compose
-
-Below we right the same as the last slide, but using the compose function to glue these together
+Below we write the same as the last slide, but using the compose function to glue these together
 
 add2Times5 is now reusable
 
@@ -291,7 +290,6 @@ them in the same order that they would be in had you done it manually. e.g
 
 
 # Why compose? 
-
 Composition of functions will usually remove duplicate code from your codebase.
 
 Trying to create functions via composition will help you write smaller and purer functions
